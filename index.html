@@ -526,21 +526,21 @@ function showSetup(fromMenu){
   if($("#g_local"))$("#g_local").onclick=function(){closeGate();setSync("이 기기에만 저장 (동기화 안 됨)","warn")};
 }
 function showLogin(msg){
-  gate('<h2>Log in</h2><label>Email</label><input id="g_em" type="email" autocomplete="username" autocapitalize="off">'+
-    '<label>Password</label><input id="g_pw" type="password" autocomplete="current-password">'+
+  gate('<h2>Log in</h2><form id="g_form" method="post" action="" autocomplete="on"><label for="g_em">Email</label><input id="g_em" name="email" type="email" autocomplete="username" autocapitalize="off" spellcheck="false">'+
+    '<label for="g_pw">Password</label><input id="g_pw" name="password" type="password" autocomplete="current-password">'+
     '<label class="rm"><input type="checkbox" id="g_rm" checked> 로그인 상태 유지 (로그아웃 전까지)</label>'+
-    '<div class="acts"><button class="tbtn primary" id="g_in">Log in</button><button class="tbtn" id="g_up">계정 만들기</button></div>'+
+    '<div class="acts"><button type="submit" class="tbtn primary" id="g_in">Log in</button><button type="button" class="tbtn" id="g_up">계정 만들기</button></div></form>'+
     '<div class="msg'+(msg?" err":"")+'" id="g_msg">'+esc(msg||"")+'</div>'+(TB_CONFIG.url?'':'<button class="lnk" id="g_cfg">Server settings</button>'));
   var m=$("#g_msg");
   function busy(t){m.className="msg";m.textContent=t}
   function fail(e){m.className="msg err";m.textContent=errText(e)}
-  $("#g_in").onclick=function(){var em=$("#g_em").value.trim(),pw=$("#g_pw").value;if(!em||!pw)return fail(new Error("이메일과 비밀번호를 입력하세요."));
+  $("#g_form").addEventListener("submit",function(e){e.preventDefault();doLogin()});
+  function doLogin(){var em=$("#g_em").value.trim(),pw=$("#g_pw").value;if(!em||!pw)return fail(new Error("이메일과 비밀번호를 입력하세요."));
     remember=$("#g_rm").checked;busy("로그인 중…");api("/auth/v1/token?grant_type=password",{method:"POST",headers:H(false),body:JSON.stringify({email:em,password:pw})})
-      .then(function(j){keepSession(j,em);afterLogin()},fail)};
+      .then(function(j){keepSession(j,em);afterLogin()},fail)}
   $("#g_up").onclick=function(){var em=$("#g_em").value.trim(),pw=$("#g_pw").value;if(!em||pw.length<6)return fail(new Error("이메일과 6자 이상 비밀번호를 입력하세요."));
     remember=$("#g_rm").checked;busy("계정 만드는 중…");api("/auth/v1/signup",{method:"POST",headers:H(false),body:JSON.stringify({email:em,password:pw})})
       .then(function(j){if(j&&j.access_token){keepSession(j,em);afterLogin()}else{m.className="msg";m.textContent="계정이 만들어졌습니다.\n이메일로 온 인증 링크를 누른 뒤 여기서 로그인하세요."}},fail)};
-  $("#g_pw").addEventListener("keydown",function(e){if(e.key==="Enter")$("#g_in").click()});
   if($("#g_cfg"))$("#g_cfg").onclick=function(){showSetup(false)};
 }
 function errText(e){var s=String(e&&e.message||e);
