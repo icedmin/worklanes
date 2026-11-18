@@ -18,7 +18,7 @@
 <style>
 :root{
   --bg:#f3f5f8; --ink:#0d1117; --rule:#0d1117; --hair:#d4d9e1; --sub:#7a8494; --faint:#b3bac6;
-  --acc:#2f5bff; --done:#9aa3b2; --danger:#d23b4a;
+  --acc:#3d7a60; --done:#9aa3b2; --danger:#d23b4a;
   --colw:320px;
   --f:"Inter Tight","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Helvetica Neue",Arial,sans-serif;
 }
@@ -67,12 +67,13 @@ input,textarea{font:inherit;color:inherit;border-radius:0}
 /* collapsed column */
 .cat.col{flex-basis:64px;width:64px;padding:0 0 10px;cursor:pointer}
 /* fold / unfold animation: 책을 책장에 꽂듯 */
-.cat.closing{flex-basis:64px;width:64px;padding-left:0;padding-right:0;overflow:hidden}
-.cat.closing .cb,.cat.closing .ch{opacity:0;transform:translateX(-10px);transition:opacity .16s ease,transform .3s ease}
-.cat.col.opening{flex-basis:var(--colw);width:var(--colw);overflow:hidden}
-.cat.col.opening .ch{opacity:0;transform:translateY(-10px);transition:opacity .14s ease,transform .2s ease}
-@keyframes spineIn{0%{opacity:0;transform:translateY(-18px)}100%{opacity:1;transform:none}}
-@keyframes pageIn{0%{opacity:0;transform:translateX(-8px)}100%{opacity:1;transform:none}}
+.cat.freeze{overflow:hidden}
+.cat.closing{flex-basis:64px;width:64px;padding-left:0;padding-right:0;transition-delay:.13s}
+.cat.closing>.cb,.cat.closing>.ch{opacity:0;transition:opacity .12s linear}
+.cat.col.opening{flex-basis:var(--colw);width:var(--colw);transition-delay:.1s}
+.cat.col.opening>.ch{opacity:0;transition:opacity .1s linear}
+@keyframes spineIn{0%{opacity:0;transform:translateY(-12px)}100%{opacity:1;transform:none}}
+@keyframes pageIn{0%{opacity:0}100%{opacity:1}}
 .cat.col.enter .ch{animation:spineIn .34s cubic-bezier(.2,.8,.2,1) both}
 .cat.enter:not(.col) .ch,.cat.enter:not(.col) .cb{animation:pageIn .3s cubic-bezier(.2,.8,.2,1) both}
 .cat.enter:not(.col) .cb{animation-delay:.05s}
@@ -92,10 +93,10 @@ input,textarea{font:inherit;color:inherit;border-radius:0}
 .row{display:flex;align-items:center;min-height:44px;border-bottom:1px solid var(--hair);position:relative;background:var(--bg)}
 .row .h{width:16px;align-self:stretch;display:flex;align-items:center;justify-content:center;color:var(--faint);cursor:grab;touch-action:none;user-select:none;font-size:11px;flex:none}
 .st{width:34px;height:40px;flex:none;display:flex;align-items:center;justify-content:center}
-.st i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--ink);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;color:var(--bg);transition:background .12s,border-color .12s}
+.st i{width:15px;height:15px;border-radius:50%;border:1.25px solid rgba(13,17,23,.38);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;color:var(--bg);transition:background .12s,border-color .12s}
 .s1 .st i{border-color:var(--acc)}
-.s1 .st i::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--acc)}
-.s2 .st i{background:var(--ink);border-color:var(--ink)}
+.s1 .st i::after{content:"";width:7px;height:7px;border-radius:50%;background:var(--acc)}
+.s2 .st i{background:var(--done);border-color:var(--done);font-size:9px}
 .row .tt{flex:1;min-width:0;text-align:left;padding:11px 6px 11px 2px;word-break:break-word;font-size:15px}
 .row.s1 .tt{color:var(--acc);font-weight:500}
 .row.s2 .tt{color:var(--done);text-decoration:line-through;text-decoration-thickness:1px}
@@ -110,6 +111,19 @@ input,textarea{font:inherit;color:inherit;border-radius:0}
 .dn>button{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--sub);padding:10px 0 10px 8px}
 .dn .rows{margin-left:-16px}
 .ghost{opacity:.3}
+/* phone inline details (accordion) */
+.chev{flex:none;width:22px;text-align:center;color:var(--faint);font-size:16px;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.row.open .chev{transform:rotate(90deg);color:var(--ink)}
+.inl{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .34s cubic-bezier(.2,.8,.2,1),opacity .26s ease}
+.inl.on{grid-template-rows:1fr;opacity:1}
+.inl-in{overflow:hidden;min-height:0}
+.inl-pad{padding:2px 0 14px 26px;border-left:1px solid var(--hair);margin-left:13px;border-bottom:1px solid var(--hair)}
+.ilbl{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--sub);margin:12px 0 4px 10px}
+.ti-inl{display:block;width:calc(100% - 10px);margin-left:10px;border:0;border-bottom:1px solid var(--hair);background:transparent;padding:6px 0;font-size:16px;font-weight:500;resize:none;outline:none;overflow:hidden}
+.inl .note.inote{width:calc(100% - 10px);margin-left:10px;min-height:70px}
+.inl .add,.inl .dn{padding-left:16px}.inl .dn .rows{margin-left:-16px}
+.inl .row.open::before{left:0}
+.row.open::before{transition:opacity .2s}
 .chosen{background:#fff}
 .sortable-fallback{opacity:.95!important;box-shadow:0 8px 24px rgba(13,17,23,.14)}
 /* menu */
@@ -261,18 +275,38 @@ function toggleCat(id){
   function done(){folding=false;justToggled=id;commit(function(){var x=catOf(id);x.collapsed=!x.collapsed})}
   if(!el||reduce){done();return}
   folding=true;
+  if(!c.collapsed){el.querySelectorAll(":scope>.ch,:scope>.cb").forEach(function(k){var w=k.getBoundingClientRect().width;k.style.width=w+"px";k.style.minWidth=w+"px"});el.classList.add("freeze")}
+  void el.offsetWidth;
   el.classList.add(c.collapsed?"opening":"closing");
-  setTimeout(done,420);
+  setTimeout(done,c.collapsed?520:560);
 }
 
 /* ---------- render ---------- */
 function stIcon(t){return '<i>'+(t.status===2?"✓":"")+'</i>'}
+var expanded={},expAnim=null;
+function inlHTML(id){
+  var t=T(id);
+  return '<div class="inl'+(expAnim===id?'':' on')+'" data-inl="'+id+'"><div class="inl-in"><div class="inl-pad">'+
+    '<div class="ilbl">Title</div><textarea class="ti-inl" rows="1" data-title="'+id+'">'+esc(t.title)+'</textarea>'+
+    '<div class="ilbl">Subtasks</div>'+listHTML(t.kids,t.id,false,"t:"+t.id)+
+    '<div class="ilbl">Note</div><textarea class="note inote" data-note="'+id+'" placeholder="연락처, 링크, 협의 내용 등">'+esc(t.note)+'</textarea>'+
+    '<div class="pf"><button class="del" data-act="del" data-id="'+id+'">Delete task</button></div></div></div></div>';
+}
+function toggleInline(id){
+  var el=$('.inl[data-inl="'+id+'"]');
+  if(expanded[id]){
+    if(el){el.classList.remove("on");var r=$('.row[data-row="'+id+'"]');if(r)r.classList.remove("open");setTimeout(function(){delete expanded[id];render()},320)}
+    else{delete expanded[id];render()}
+  }else{expanded[id]=1;expAnim=id;render()}
+}
 function rowHTML(id,inDone){
-  var t=T(id),pg=progress(t),open=pops.some(function(p){return p.id===id});
+  var t=T(id),pg=progress(t),open=isMobile()?!!expanded[id]:pops.some(function(p){return p.id===id});
   return '<div class="row s'+t.status+(open?" open":"")+'" data-row="'+id+'">'+
     (inDone?'<span class="h" style="cursor:default"></span>':'<span class="h" title="끌어서 순서 변경">⋮⋮</span>')+
     '<button class="st" data-act="cycle" data-id="'+id+'" aria-label="상태 변경">'+stIcon(t)+'</button>'+
-    '<button class="tt" data-act="open" data-id="'+id+'">'+esc(t.title)+'</button>'+(pg?'<span class="pg">'+pg+'</span>':"")+'</div>';
+    '<button class="tt" data-act="open" data-id="'+id+'">'+esc(t.title)+'</button>'+(pg?'<span class="pg">'+pg+'</span>':"")+
+    (isMobile()?'<span class="chev">›</span>':'')+'</div>'+
+    (isMobile()&&expanded[id]?inlHTML(id):'');
 }
 function listHTML(ids,owner,isCat,key){
   var act=ids.filter(function(x){return T(x).status!==2}),dn=ids.filter(function(x){return T(x).status===2}),o=!!doneOpen[key];
@@ -298,6 +332,8 @@ function render(){
       '<div class="cb">'+listHTML(c.items,c.id,true,"c:"+c.id)+'</div></section>';
   }).join("")+'<div class="addcol"><button data-act="addcat">+ Add<br>category</button></div></div>';
   b.innerHTML=h;justToggled=null;
+  if(expAnim){var ie=$('.inl[data-inl="'+expAnim+'"]');expAnim=null;if(ie){void ie.offsetHeight;requestAnimationFrame(function(){requestAnimationFrame(function(){ie.classList.add("on")})})}}
+  document.querySelectorAll("textarea.ti-inl").forEach(autoH);
   if($("#cats"))$("#cats").scrollLeft=sx;
   renderPops();
   $("#undo").disabled=!hist.length;$("#redo").disabled=!fut.length;
@@ -334,7 +370,7 @@ function bindSortables(){
     var ord=[].map.call(cats.querySelectorAll(":scope > .cat"),function(el){return el.dataset.cat});
     commit(function(){state.cats.sort(function(a,b){return ord.indexOf(a.id)-ord.indexOf(b.id)})});}})));
   document.querySelectorAll(".list").forEach(function(el){
-    sortables.push(Sortable.create(el,Object.assign({},o,{draggable:".row",group:el.dataset.iscat==="1"?"cats":"p:"+el.dataset.owner,onEnd:onDrop})));
+    sortables.push(Sortable.create(el,Object.assign({},o,{draggable:".row",onStart:function(ev){var id=ev.item.dataset.row;if(expanded[id]){delete expanded[id];var x=$('.inl[data-inl="'+id+'"]');if(x)x.remove()}},group:el.dataset.iscat==="1"?"cats":"p:"+el.dataset.owner,onEnd:onDrop})));
   });
 }
 function onDrop(ev){
@@ -353,6 +389,7 @@ function onDrop(ev){
 /* ---------- popups ---------- */
 var POPW=340;
 function openPop(id,anchor){
+  if(isMobile()){toggleInline(id);return}
   var ex=pops.findIndex(function(p){return p.id===id});
   if(ex>=0){pops.push(pops.splice(ex,1)[0]);render();return}
   var fromPop=anchor&&anchor.closest(".pop"),vw=window.innerWidth,vh=window.innerHeight,G=24,x,y;
@@ -368,7 +405,7 @@ function openPop(id,anchor){
 }
 function closePop(id){var k={};k[id]=1;var g=true;while(g){g=false;pops.forEach(function(p){if(!k[p.id]&&p.from&&k[p.from]){k[p.id]=1;g=true}})}
   pops=pops.filter(function(p){return !k[p.id]});render()}
-function prunePops(){pops=pops.filter(function(p){return T(p.id)});pops.forEach(function(p){if(p.from&&!T(p.from))p.from=null})}
+function prunePops(){Object.keys(expanded).forEach(function(k){if(!T(k))delete expanded[k]});pops=pops.filter(function(p){return T(p.id)});pops.forEach(function(p){if(p.from&&!T(p.from))p.from=null})}
 function drawLines(){
   var svg=$("#lines");if(!pops.length||isMobile()){if(svg.innerHTML)svg.innerHTML="";return}
   var h="";
