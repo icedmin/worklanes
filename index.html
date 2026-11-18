@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#f3f5f8">
-<title>Task Board</title>
+<title>Worklanes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -165,7 +165,7 @@ input,textarea{font:inherit;color:inherit;border-radius:0}
 </head>
 <body>
 <div class="top"><div class="top-in">
-  <span class="brand">Task Board</span><span id="sync" class="sync"></span>
+  <span class="brand">Worklanes</span><span id="sync" class="sync"></span>
   <span class="sp"></span>
   <button class="tbtn" id="undo" title="되돌리기 (Ctrl+Z)">Undo</button>
   <button class="tbtn" id="redo" title="다시 실행 (Ctrl+Y)">Redo</button>
@@ -475,7 +475,7 @@ window.addEventListener("online",function(){if(sess){if(dirty)flush();else pull(
 window.addEventListener("focus",function(){if(sess&&!dirty&&!writing)pull()});
 
 /* ---------- gate screens ---------- */
-function gate(html){var g=$("#gate");g.innerHTML='<div class="in"><span class="brand">Task Board</span>'+html+'</div>';g.classList.remove("hidden")}
+function gate(html){var g=$("#gate");g.innerHTML='<div class="in"><span class="brand">Worklanes</span>'+html+'</div>';g.classList.remove("hidden")}
 function closeGate(){$("#gate").classList.add("hidden");$("#gate").innerHTML=""}
 function showSetup(fromMenu){
   gate('<h2>Server<br>setup</h2><label>Supabase Project URL</label><input id="g_url" placeholder="https://xxxx.supabase.co" autocomplete="off" autocapitalize="off" spellcheck="false" value="'+esc(cfg?cfg.url:"")+'">'+
